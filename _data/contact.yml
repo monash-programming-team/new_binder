@@ -1,11 +1,13 @@
 #  The contact options.
 
 -
-  type: github
-  icon: 'fab fa-github-alt'
+  type: discord
+  icon: 'fab fa-discord'
+  url: https://discord.link/MonashICPC
 -
-  type: twitter
-  icon: 'fab fa-twitter'
+  type: facebook
+  icon: 'fab fa-facebook'
+  url: https://www.facebook.com/groups/454114112027992
 -
   type: email
   icon: 'fas fa-envelope'

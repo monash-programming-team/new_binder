@@ -11,40 +11,28 @@ baseurl: ''
 lang: en-US
 
 # Change to your timezone › http://www.timezoneconverter.com/cgi-bin/findzone/findzone
-timezone: Asia/Shanghai
+timezone: Australia/Melbourne
 
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # --------------------------
-title: Chirpy                          # the main title
+title: Monash Code Binder                          # the main title
 
-tagline: A text-focused Jekyll theme   # it will display as the sub-title
+tagline: For Training / Contests  # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
-  A minimal, portfolio, sidebar,
-  bootstrap Jekyll theme with responsive web design
-  and focuses on text presentation.
+  A collection of algorithms, explanations and training problems
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
-url: ''
+url: https://blog.monashicpc.com/new-binder/
 
-author: your_full_name                  # change to your full name
-
-github:
-  username: github_username             # change to your github username
-
-twitter:
-  username: twitter_username            # change to your twitter username
+author: Monash Programming Team                  # change to your full name
 
 social:
-  name: your_full_name                  # it will shows as the copyright owner in Footer
-  email: example@doamin.com             # change to your email address
+  name: Monash Programming Team                  # it will shows as the copyright owner in Footer
+  email: jackson@monashicpc.com             # change to your email address
   links:
-    # The first element serves as the copyright owner's link
-    - https://twitter.com/username      # change to your twitter homepage
-    - https://github.com/username       # change to your github homepage
-    # Uncomment below to add more social links
-    # - https://www.facebook.com/username
-    # - https://www.linkedin.com/in/username
+    - https://discord.link/MonashICPC
+    - https://www.facebook.com/groups/454114112027992
 
 google_site_verification: google_meta_tag_verification # change to your verification string
 # --------------------------
@@ -71,7 +59,7 @@ google_analytics:
 #     light  - Use the light color scheme
 #     dark   - Use the dark color scheme
 #
-theme_mode:   # [light|dark]
+theme_mode: dark
 
 # The CDN endpoint for images.
 # Notice that once it is assigned, the CDN url
@@ -81,7 +69,7 @@ theme_mode:   # [light|dark]
 img_cdn: ''
 
 # the avatar on sidebar, support local or CORS resources
-avatar: https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/commons/avatar.jpg
+avatar: assets/img/icpc.png
 
 # boolean type, the global switch for ToC in posts.
 toc: true
@@ -122,7 +110,7 @@ defaults:
       type: posts
     values:
       layout: post
-      comments: true    # Enable comments in posts.
+      comments: false    # Enable comments in posts.
       toc: true         # Display TOC column in posts.
   -
     scope:
