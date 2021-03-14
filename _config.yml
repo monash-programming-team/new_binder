@@ -23,7 +23,7 @@ description: >-                        # used by seo meta and the atom feed
   A collection of algorithms, explanations and training problems
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
-url: https://blog.monashicpc.com/new-binder/
+url: https://blog.monashicpc.com/new_binder/
 
 author: Monash Programming Team                  # change to your full name
 
