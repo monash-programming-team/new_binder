@@ -4,5 +4,5 @@ icon: fas fa-info
 order: 4
 ---
 
-
-> **Note**: Add Markdown syntax content to file `_tabs/about.md` and it will show up on this page.
+This site is a collection of problem solving techniques, with related problems and implementations in Python + CPP.
+It also houses a printable binder for use in contests.
