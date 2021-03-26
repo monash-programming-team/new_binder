@@ -15,6 +15,19 @@ window.onload = () => {
             all_tabcontent[j].style.display = "block";
         }
     }
+    // Generate tooltips
+    // https://stackoverflow.com/a/48569235
+    $(document).on('mouseover','.tooltip', function() {
+      var tooltipTrigger = $('[data-toggle="tooltip"][aria-describedby="' + $(this).attr('id') + '"');
+      if(! $(tooltipTrigger).hasClass('active')) {
+        $(tooltipTrigger).tooltip('show').addClass('active');
+      }
+    });
+    $(document).on('mouseout','.tooltip-inner', function() {
+      $('[data-toggle="tooltip"].active').tooltip('hide').removeClass('active');
+    });
+
+    $('[data-toggle="tooltip"]').tooltip()
 };
 
 function openCodeTab(evt, contentClass, tabName) {
@@ -34,4 +47,4 @@ function openCodeTab(evt, contentClass, tabName) {
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
-} 
+}
