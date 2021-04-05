@@ -1,7 +1,7 @@
 ---
 title: Primes and Factorization Techniques
 author: Jackson Goerner
-date: 2021-03-29 12:00:00 +1100
+date: 2021-04-05 12:00:00 +1100
 categories: [Math]
 tags: [Difficulty 3]
 math: true
