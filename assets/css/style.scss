@@ -51,3 +51,19 @@ html[mode="dark"] .code-tab {
     border: 1px solid #ccc;
     border-top: none;
 }
+
+code {
+  font-family: 'Fira Code', monospace;
+  pre {
+    font-family: 'Fira Code', monospace;
+  }
+}
+
+@supports (font-variation-settings: normal) {
+  code {
+    font-family: 'Fira Code VF', monospace;
+    pre {
+      font-family: 'Fira Code VF', monospace;
+    }
+  }
+}
