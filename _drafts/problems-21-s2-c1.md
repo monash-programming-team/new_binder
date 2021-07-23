@@ -1,5 +1,5 @@
 ---
-title: Challenge Problems 1
+title: Challenge Problems - 2021 Sem 2, Contest 1
 author: Jackson Goerner & Ali Toosi
 date: 2021-04-28 12:00:00 +1100
 categories: [Challenge Problems]
