@@ -67,3 +67,26 @@ code {
     }
   }
 }
+
+.unlock {
+  .show {
+    display: none;
+  }
+  .button_unlock {
+    display: block;
+    font-size: larger;
+    border-radius: 15px;
+    border-width: 0;
+    padding: 3px 10px;
+  }
+  .hint {
+    background: #ffc107b0;
+  }
+  .solution {
+    background: #1ab21ab0;
+  }
+}
+
+.hint {
+  display: none;
+}
