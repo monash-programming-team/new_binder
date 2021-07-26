@@ -21,14 +21,71 @@ Of course, Andrew wants to be able to give a football to everyone who requests o
 
 Andrew wants to know the probability that the above situation does **not** occur today, in other words the probability that every time someone requests a football, Andrew has one in stock.
 
-TODO: Test cases and images.
-
 ### Input / Output
 
 Input will consist of three space separated integers, \\(p, q\\) and \\(r\\), as defined in the problem statement.
 Output should be a single number, the probability that Andrew will always be able to give a football to anyone who requests it. This number should have absolute error less than \\(10^{-8}\\).
 
-### Solution
+### Example Run
+
+Input
+
+```
+4 1 3
+```
+
+Output
+
+```
+0.8
+```
+
+Since there is a 20% chance that the "return a football" event occurs before all 4 "request a football" events, which would cause problems.
+
+### Hints / Solution
+
+<div class="unlock" markdown="1">
+  <button class="button_unlock hint">Hint 1</button>
+
+<div class="show" markdown="1">
+
+**Hint 1**
+
+Simulating won't be enough, because of the sizes of `p`, `q` and `r`. What you should instead do is try to find a general form for the probability, based on `p`, `q`, `r`.
+
+Start by trying to come up with a visualisation of this process in 2-dimensional space. What do good/bad orderings of people look like?
+
+</div>
+
+</div>
+
+<div class="unlock" markdown="1">
+
+<button class="button_unlock hint">Hint 2</button>
+
+<div class="show" markdown="1">
+
+**Hint 2**
+
+The visualisation we are looking for is one where we begin at point \\((r, 0)\\), and for each person, we either move to the right 1 unit (person returns a football), or up 1 unit (person requests a football).
+
+A run is then invalid when we cross (not touch) the line \\(y = x\\). For an invalid run, what happens when we flip all points across the line \\(y = x\\) before the intersection?
+
+![](/assets/img/posts/cp1/grid3.png)
+
+What is the total number of paths from this new starting point to \\((q+r, p)\\)?
+
+</div>
+
+</div>
+
+<div class="unlock" markdown="1">
+
+<button class="button_unlock solution">Solution</button>
+
+<div class="show" markdown="1">
+
+**Solution**
 
 To handle the easy cases, if \\(p \leq r\\), then the probability is 1 (We can't possibly run out of footballs). If \\( p > r + q\\), then the probability is 0 (We can't possibly handle everyones request). We assume neither of these is the case for the following discussion.
 
@@ -123,6 +180,11 @@ int main() {
 ```
 
 </div>
+
+</div>
+
+</div>
+
 
 ## Problem 2 - Optimal Farming
 
