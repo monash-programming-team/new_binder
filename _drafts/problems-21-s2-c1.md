@@ -1,6 +1,6 @@
 ---
 title: Challenge Problems - 2021 Sem 2, Contest 1
-author: Jackson Goerner & Ali Toosi
+author: Jackson Goerner
 date: 2021-04-28 12:00:00 +1100
 categories: [Challenge Problems]
 tags: []
@@ -8,7 +8,7 @@ math: true
 code: true
 ---
 
-## Problem 1 - Sports Loans
+## Sports Loans
 
 ### Statement
 
@@ -69,7 +69,7 @@ Start by trying to come up with a visualisation of this process in 2-dimensional
 
 The visualisation we are looking for is one where we begin at point \\((r, 0)\\), and for each person, we either move to the right 1 unit (person returns a football), or up 1 unit (person requests a football).
 
-A run is then invalid when we cross (not touch) the line \\(y = x\\). For an invalid run, what happens when we flip all points across the line \\(y = x\\) before the intersection?
+A run is then invalid when we cross (not touch) the line \\(y = x\\). For an invalid run, what happens when we flip all points across the line \\(y = x + 1\\) before the intersection?
 
 ![](/assets/img/posts/cp1/grid3.png)
 
@@ -141,7 +141,8 @@ else:
     p_bad = 1
     for i in range(r+1):
         p_bad *= (p-i) / (q+i+1)
-    print(1-p_bad)
+    # Be safe with 10 precision points.
+    print(f"{1-p_bad:.10f}")
 ```
 
 </div>
@@ -186,15 +187,13 @@ int main() {
 </div>
 
 
-## Problem 2 - Optimal Farming
+## Optimal Farming
 
 ### Statement
 
 Amy has just bought a farm in the outback, and wants to start selling tomatoes. Some of the crops in the farm are already tomatoes, but there are others she wants to get rid of and replace with tomatoes.
 
-Amy has employed the help of Square Tomatoes Group™. Amy can pay the group $\\(s\\) to plant an \\(s \times s\\) grid of crops with tomatoes (It doesn't matter if the existing crop was tomatoes or not, and this grid can extend past the farm limits). Amy wants to minimise her cost to Square Tomatoes Group™ such that all crops are tomatoes.
-
-TODO: Test cases and images.
+Amy has employed the help of Square Tomatoes Group™. Amy can pay the group $\\(s\\) to plant an \\(s \times s\\) grid of crops with tomatoes (It doesn't matter if the existing crop was tomatoes or not, all grid squares become tomatoes. This square can also exceed Amy's farm). Amy wants to minimise her cost to Square Tomatoes Group™ such that all crops are tomatoes.
 
 ### Input / Output
 
@@ -203,16 +202,89 @@ Input then contains \\(l\\) lines, each containing a string of \\(w\\) character
 
 Output should be a single integer, the minimum Amy has to pay to fill her farm with tomato crops.
 
-### Solution
+### Example Test
+
+Input
+
+```
+3 4
+PWTT
+TCTT
+TTTL
+```
+
+Output
+
+```
+3
+```
+
+Explanation: We can pay Square Tomatoes Group™ \\(\$2\\) to plant tomatoes in the top-left 2x2 area, and then \\(\$1\\) to plant tomatoes in the final bottom-right square.
+
+### Hints / Solution
+
+<div class="unlock" markdown="1">
+  <button class="button_unlock hint">Hint 1</button>
+
+<div class="show" markdown="1">
+
+**Hint 1**
+
+Note that if every row and column has a square with no tomato, then the answer is rather obvious.
+The problem only gets interesting when an entire row/column is already tomatoes.
+
+</div>
+
+</div>
+
+<div class="unlock" markdown="1">
+  <button class="button_unlock hint">Hint 2</button>
+
+<div class="show" markdown="1">
+
+**Hint 2**
+
+Suppose we don't go for the easy solution of just using a massive square to cover our farm, and have a cheaper solution.
+Then one of the rows or columns in the farm must be untouched. How can we recurse from here?
+
+</div>
+
+</div>
+
+<div class="unlock" markdown="1">
+  <button class="button_unlock solution">Solution</button>
+
+<div class="show" markdown="1">
+
+**Solution**
 
 We will generalise and compute \\(\text{cost}(x1, x2, y1, y2)\\), the cost of converting the rectangle \\([x1, x2), [y1, y2)\\) all to tomatoes. The question is asking us to compute \\(\text{cost}(0, w, 0, l)\\).
 
-Note that we can always spend \\(\text{max}(x2-x1, y2-y1)\\) and cover the rectangle, by using a square that exceeds the bounds.
-Also, note that if a collection of squares overlaps every column of the rectangle, then the cost must be at least \\(x2-x1\\), and similarly if every row of the rectangle is overlapped by a square, the minimum cost is \\(y2-y1\\).
+Note that we can always spend \\(\$\text{max}(x2-x1, y2-y1)\\) and cover the rectangle, by using a square that exceeds the bounds.
+Also, note that if a collection of squares overlaps every column of the rectangle, then the cost of planting all of these squares must be at least \\(x2-x1\\), and similarly if every row of the rectangle is overlapped by a square, the minimum cost is \\(y2-y1\\).
 
-With this in mind, suppose there was a cheaper selection of squares that convert this rectangle to tomatoes. Then from the logic above, there must be some column or row which is not touched by these squares (A column or row that is already all tomatoes). This column/row separates our rectangle in two, and so we can solve the subproblem of \\(\text{cost}\\) on each of these rectangles.
+With this in mind, suppose there was a cheaper selection of squares that converts this entire rectangle to tomatoes. Then from the logic above, there must be some column or row which is not touched by these planted squares (A column or row that is already all tomatoes). This column/row separates our rectangle in two, and so we can solve the subproblem of \\(\text{cost}\\) on each of these rectangles.
 
-TODO: Complete and use better wording.
+For example, in the input given, we have a \\(3 \times 4\\) rectangle. The easy solution is to cover the entire thing with a \\(4 \times 4\\) square, costing \\(\$4\\).
+
+But, column 2 is all tomatoes, so we can solve the subproblem on the left and right hand sides of this column, and see if doing this is cheaper. Continuing along, we find the left subproblem costs \\(\$2\\), and the right subproblem costs \\(\$1\\), and so the final result is \\(\$3\\).
+
+We can achieve this within the time limit with [Dynamic Programming](http://blog.monashicpc.com/new_binder/posts/dp/).
+
+The recursive definition is:
+
+$$
+\text{cost}(x1, x2, y1, y2) := \text{min} \begin{cases}
+    (x2 - x1) \times (y2 - y1) &\\
+    \text{cost}(x1, c, y1, y2) + \text{cost}(c, x2, y1, y2) & x1 < c < x2, \text{column } c \text{ from } y1 \to y2 \text{ all tomato.}\\
+    \text{cost}(x1, x2, y1, r) + \text{cost}(x1, x2, r, y2) & y1 < r < y2, \text{row } r \text{ from } x1 \to x2 \text{ all tomato.}
+\end{cases}
+$$
+
+The base case being that \\(\text{cost}(x1, x1+1, y1, y1+1) = b\\), where \\(b\\) is 0 if it's a tomato plant, and 1 otherwise.
+In order to know when an entire segment of a row/column is all tomatoes, we can also use DP, by breaking up each square into individual rows / columns.
+
+For both of these we have \\(l^2w^2\\) values to compute, and each of the values takes \\(l + w\\) operations to compute (In the recursive definition, we might recurse for every row and column in the square). So the total cost is about \\(30^5 \approx 2 \times 10^7\\)
 
 <div class="code-tab">
     <button class="code-tablinks CHALLENGE-2-link" onclick="openCodeTab(event, 'CHALLENGE-2', 'CHALLENGE-2-Python')">Python</button>
@@ -223,21 +295,22 @@ TODO: Complete and use better wording.
 
 ```python
 import sys
+# Maximum recursion for this problem is actually like 60, but better safe than sorry.
 sys.setrecursionlimit(10000)
 
 l, w = list(map(int, input().split()))
 
 grid = [input() for _ in range(l)]
 
-# is the rectangle from x1 to x2, y1 to y2 all tomatoes? (RHS exclusive)
+# is the rectangle from x1 to x2, y1 to y2 all tomato? (RHS exclusive)
 tomato_dp = [[[[None for _1 in range(31)] for _2 in range(31)] for _3 in range(31)] for _4 in range(31)]
-def all_tomatoes(x1, x2, y1, y2):
+def all_tomato(x1, x2, y1, y2):
     if tomato_dp[x1][x2][y1][y2] is not None:
         return tomato_dp[x1][x2][y1][y2]
     if x1 < x2 - 1:
-        tomato_dp[x1][x2][y1][y2] = all_tomatoes(x1, x2-1, y1, y2) and all_tomatoes(x2-1, x2, y1, y2)
+        tomato_dp[x1][x2][y1][y2] = all_tomato(x1, x2-1, y1, y2) and all_tomato(x2-1, x2, y1, y2)
     elif y1 < y2 - 1:
-        tomato_dp[x1][x2][y1][y2] = all_tomatoes(x1, x2, y1, y2-1) and all_tomatoes(x1, x2, y2-1, y2)
+        tomato_dp[x1][x2][y1][y2] = all_tomato(x1, x2, y1, y2-1) and all_tomato(x1, x2, y2-1, y2)
     else:
         # y2 = y1+1, x2 = x1+1.
         tomato_dp[x1][x2][y1][y2] = grid[x1][y1] == "T"
@@ -253,17 +326,15 @@ def cost(x1, x2, y1, y2):
     cur_min = max(x2-x1, y2-y1)
     # Otherwise, there is an empty row/column we can exclude. Simply solve this suproblem.
     for c in range(x1, x2):
-        if all_tomatoes(c, c+1, y1, y2):
+        if all_tomato(c, c+1, y1, y2):
             cur_min = min(cost(x1, c, y1, y2) + cost(c+1, x2, y1, y2), cur_min)
     for r in range(y1, y2):
-        if all_tomatoes(x1, x2, r, r+1):
+        if all_tomato(x1, x2, r, r+1):
             cur_min = min(cost(x1, x2, y1, r) + cost(x1, x2, r+1, y2), cur_min)
     cost_dp[x1][x2][y1][y2] = cur_min
     return cost_dp[x1][x2][y1][y2]
 
-print(cost(0, w, 0, l))
-
-
+print(cost(0, l, 0, w))
 ```
 
 </div>
@@ -285,28 +356,27 @@ int l, w;
 
 const int UNKNOWN = -1;
 
-int DP_TOMATOES[MAXN+1][MAXN+1][MAXN+1][MAXN+1];
+int DP_TOMATO[MAXN+1][MAXN+1][MAXN+1][MAXN+1];
 int DP_COST[MAXN+1][MAXN+1][MAXN+1][MAXN+1];
 string grid[MAXN+1];
 
-// Is the rectangle [x1, x2), [y1, y2) all tomatoes?
-bool tomatoes(int x1, int x2, int y1, int y2) {
-    if (DP_TOMATOES[x1][x2][y1][y2] != UNKNOWN)
-        return DP_TOMATOES[x1][x2][y1][y2];
+bool tomato(int x1, int x2, int y1, int y2) {
+    // Is the rectangle [x1, x2), [y1, y2) already tomato?
+    if (DP_TOMATO[x1][x2][y1][y2] != UNKNOWN)
+        return DP_TOMATO[x1][x2][y1][y2];
     if (x1 < x2 - 1) {
         // Look at the column x=x2-1 separately
-        DP_TOMATOES[x1][x2][y1][y2] = tomatoes(x1, x2-1, y1, y2) && tomatoes(x2-1, x2, y1, y2);
+        DP_TOMATO[x1][x2][y1][y2] = tomato(x1, x2-1, y1, y2) && tomato(x2-1, x2, y1, y2);
     } else if (y1 < y2 - 1) {
         // Look at the row y=y2-1 separately
-        DP_TOMATOES[x1][x2][y1][y2] = tomatoes(x1, x2, y1, y2-1) && tomatoes(x1, x2, y2-1, y2);
+        DP_TOMATO[x1][x2][y1][y2] = tomato(x1, x2, y1, y2-1) && tomato(x1, x2, y2-1, y2);
     } else {
         // We are a 1x1.
-        DP_TOMATOES[x1][x2][y1][y2] = grid[x1][y1] == 'T';
+        DP_TOMATO[x1][x2][y1][y2] = grid[x1][y1] == 'T';
     }
-    return DP_TOMATOES[x1][x2][y1][y2];
+    return DP_TOMATO[x1][x2][y1][y2];
 }
 
-// What is the cost of making rectangle [x1, x2), [y1, y2) all tomatoes?
 int cost(int x1, int x2, int y1, int y2) {
     if (DP_COST[x1][x2][y1][y2] != UNKNOWN)
         return DP_COST[x1][x2][y1][y2];
@@ -316,15 +386,15 @@ int cost(int x1, int x2, int y1, int y2) {
     // We can always cover the rectangle by using a big square.
     int cur_min = MAX(x2-x1, y2-y1);
     FOR(c,x1,x2)
-        if (tomatoes(c, c+1, y1, y2))
-            // If this column is tomatoes, then we can try solving the two subproblems instead by removing the column.
+        if (tomato(c, c+1, y1, y2))
+            // If this column is tomato, then we can try solving the two subproblems instead by removing the column.
             cur_min = MIN(
                 cur_min,
                 cost(x1, c, y1, y2) + cost(c+1, x2, y1, y2)
             );
     FOR(r,y1,y2)
-        if (tomatoes(x1, x2, r, r+1))
-            // If this row is tomatoes, then we can try solving the two subproblems instead by removing the row.
+        if (tomato(x1, x2, r, r+1))
+            // If this row is tomato, then we can try solving the two subproblems instead by removing the row.
             cur_min = MIN(
                 cur_min,
                 cost(x1, x2, y1, r) + cost(x1, x2, r+1, y2)
@@ -340,12 +410,12 @@ int main() {
         cin >> grid[i];
     }
 
-    FOR(x1,0,w+1)FOR(x2,0,w+1)FOR(y1,0,l+1)FOR(y2,0,l+1) {
-        DP_TOMATOES[x1][x2][y1][y2] = UNKNOWN;
+    FOR(x1,0,l+1)FOR(x2,0,l+1)FOR(y1,0,w+1)FOR(y2,0,w+1) {
+        DP_TOMATO[x1][x2][y1][y2] = UNKNOWN;
         DP_COST[x1][x2][y1][y2] = UNKNOWN;
     }
 
-    cout << cost(0, w, 0, l) << endl;
+    cout << cost(0, l, 0, w) << endl;
 
     return 0;
 }
@@ -353,51 +423,244 @@ int main() {
 
 </div>
 
-## Problem 3 - Marble Track
+</div>
+
+</div>
+
+## Repetitive Jugglers
 
 ### Statement
 
-Alice has just recieved a new marble track for her birthday, as well as \\(n\\) shiny new marbles!
-This marble track starts off with all \\(n\\) marbles in different pipes, but as the marbles move down the track, more and more pipes merge together, until all marbles meet at the bottom. The marbles can be modelled as a tree graph, where the root node is the endpoint of every marble, and each leaf is an entry-point for the marbles. This tree has \\(m\\) vertices and \\(m-1\\) edges.
+Alice is the leader of a juggling crew, and they are set to perform a crazy juggling trick.
 
-Each marble has it's own texture, and so makes a distinctive sound when two marbles clank together.
-Because of this, Alice wants to know where on the marble track she should focus if she weants to hear this sound. Alice also wants to know how many marbles with pass through this pipe.
+In this trick, every member of the crew starts off with a different coloured ball. Every member then picks another member of the crew (possibly themselves), let us call that member their receiver.
 
-### Input / Output
+Then, the trick begins. Every second, every crew member will throw all of the balls they are holding to their designated receiver.
 
-Input will start with one line containing 3 space-separated integers, \\(n, m, q\\). \\(n\\) is the number of marbles, \\(m\\) is the number of vertices in the tree representing the marble track, and \\(q\\) is the number of queries Alice will make.
+The trick only stops once everyone has the same ball they started with (Note that not always does this trick stop!)
 
-Next follows \\(m-1\\) lines, each giving a distinct edge in the tree. It is guaranteed that the root node of the tree with be vertex 0, and the \\(n\\) marble entrance nodes will be \\(m-n\\) through to \\(m-1\\).
+Alice wants to know, given who has chosen who as receiver, whether the game will end, and if so, how many seconds this will take.
 
-After this \\(q\\) lines follow. These represent the queries Alice has. Each line will contain two space-separated integers, \\(0 \leq a, b < n\\).
+### Input
 
-Output should consist of \\(q\\) lines. For each of the \\(q\\) corresponding lines in input, output two space-separated integers: the vertex at which these two marbles will meet and the number of marbles that will be there.
+Input will consist of two lines.
 
-### Solution
+The first line will contain an integer \\(n\\), the number of members in the juggling crew.
 
-TODO: fillin LCA + DP details.
+The second line will then contain \\(n\\) space-separated integers. The \\(i\\)th integer represents the \\(i\\)th crew member's pick for receiver.
 
-## Actual Problem 3 - Juggling Trick
+(So we enumerate crew members \\(1, 2, 3\ldots\\), and if the second integer is \\(1\\), that means that crew member \\(2\\) has chosen \\(1\\) as their receiver.)
 
-### Statement
+It is guaranteed that if the trick does stop, **it will stop before \\(10^{15}\\) seconds have passed**
 
-Alice and her team of master jugglers are performing a trick. In this trick, every member of the team picks another member of the team - This will be the member they pass juggling balls to. Then, every member of the team grabs a different coloured juggling ball, and begins juggling.
-Every 10 seconds, each member then passes all of their juggling balls to the person they chose. Team members are allowed to pick the same team member to pass juggling balls to, so you can end up with one person doing all the juggling!
+### Output
 
-Alice wants to know if at any point in the trick everyone will have the ball they started off with, and if so how long it will take to see this.
+If the trick will never finish, print \\(-1\\).
+Otherwise, print the total length of the trick, in seconds.
 
-### Input / Output
+### Example Test
 
-Input will consist of 2 lines. The first line will contain a single integer \\(n\\), the number of members in Alice's team. The next line will contain \\(n\\) space-separated integers, the \\(i^{\text{th}}\\) integer \\(k\\) means that the \\(i^{\text{th}}\\) member of the team will pass the the \\(k^{\text{th}}\\) member.
+Input
 
-Output should be a single integer. If there is no amount of time after which the jugglers find themselves back at the starting position, then output -1.
-Otherwise, output the shortest amount of seconds we will have to wait.
+```
+3
+2 1 3
+```
 
-### Solution
+Output
 
-Note that if any member recieves two juggling balls, then our sequence can never return to how it was. Therefore everyone must recieve a single ball every 10 seconds. In other words, our \\(n\\) space-separated integers must be a permutation of the numbers \\(1\\) through to \\(n\\).
-Note that in a permutation, way he multiple distinct cycles of different sizes (For example 1 passes to 3 passes to 7 passes to 4 passes to 1). Notably, each of the cycles repeat every \\(10k\\) seconds, where \\(k\\) is the length of the cycle.
+```
+2
+```
 
-Therefore, if we have cycles of length \\(k_1, k_2, \ldots k_a\\), then the first time the entire sequence will repeat must be the least common multiple of these values \\(k_1, k_2, \ldots k_a\\).
+After 1 second, person 1 and person 2 throw the balls at each other, and person 3 throws the ball to themselves. As such person 1 is holding person 2's ball, and person 2 is holding person 1's ball. Person 3 is holding their own ball.
 
-So our solution just needs to find each of these cycles, and count their length.
+After 2 seconds, the same action occurs, and so everyone is holding their own ball.
+
+### Hints / Solution
+
+<div class="unlock" markdown="1">
+  <button class="button_unlock hint">Hint 1</button>
+
+<div class="show" markdown="1">
+
+**Hint 1**
+
+Since this trick might continue for \\(10^{15}\\) seconds, we cannot simulate it (Especially with large \\(n\\)).
+
+We need to figure out ahead of time when this will occur.
+
+Notice that if one person receives 2 or more balls at any point in time, the trick will never end.
+
+</div>
+
+</div>
+
+<div class="unlock" markdown="1">
+  <button class="button_unlock hint">Hint 2</button>
+
+<div class="show" markdown="1">
+
+**Hint 2**
+
+Only selections of "receivers" in which every member is the receiver of exactly one member will finish, and they will always finish.
+
+For math inclined individuals, these receivers represent a permutation of the group, and we want to know how many repeated applications of this permutation are needed to take us back to the identity.
+
+We can figure out how long this will take based on cycles that are present in the permutation.
+
+</div>
+
+</div>
+
+<div class="unlock" markdown="1">
+  <button class="button_unlock solution">Solution</button>
+
+<div class="show" markdown="1">
+
+**Solution**
+
+Note that if any member recieves two juggling balls, then our sequence can never return to how it was. Therefore everyone must recieve a single ball every second. In other words, our \\(n\\) space-separated integers must be a [permutation](https://www.wikiwand.com/en/Permutation) of the numbers \\(1\\) through to \\(n\\).
+Note that in a permutation, there are multiple distinct cycles of different sizes (For example 1 passes to 3 passes to 7 passes to 4 passes to 1). Notably, everyone in these cycles has their ball every \\(k\\) seconds, where \\(k\\) is the length of the cycle.
+
+Therefore, if we have cycles of length \\(k_1, k_2, \ldots k_a\\), then the first time the entire sequence will repeat must be the least common multiple of these values \\(k_1, k_2, \ldots k_a\\) (The first number \\(c\\), which is divisible by all of \\(k1, k2, \ldots, k_a\\)).
+
+So our solution just needs to find each of these cycles, and count their length. Then compute the least common multiple.
+
+In the sample input, we have a permutation with 2 cycles (1 passes to 2 passes to 1, and 3 passes to 3). These cycles are of length 2 and 1 respectively.
+
+Therefore every 2 seconds, members 1 and 2 will have their balls, and every second, member 3 will have their ball. Because of this, the answer is the smallest number which is divisible by 2 and 1 (2).
+
+<div class="code-tab">
+    <button class="code-tablinks CHALLENGE-3-link" onclick="openCodeTab(event, 'CHALLENGE-3', 'CHALLENGE-3-Python')">Python</button>
+    <button class="code-tablinks CHALLENGE-3-link" onclick="openCodeTab(event, 'CHALLENGE-3', 'CHALLENGE-3-CPP')">CPP</button>
+</div>
+
+<div id="CHALLENGE-3-Python" class="code-tabcontent CHALLENGE-3"  markdown="1">
+
+```python
+n = int(input())
+# make it 0 -> n-1.
+choices = list(map(lambda x: int(x)-1, input().split()))
+
+# Greatest common divisor
+def gcd(a, b):
+    if b == 0:
+        return abs(a)
+    return gcd(b, a%b)
+
+# Least common multiple
+def lcm(a, b):
+    return a * b // gcd(a, b)
+
+# list(set()) will remove duplicates. If no duplicates, then we have a permutation
+if len(list(set(choices))) == n:
+    # Permutation
+    # Find the cycle lengths
+    lengths = []
+    found = [False]*n
+    for x in range(n):
+        # Is x not already in a cycle?
+        if not found[x]:
+            length = 0
+            # Search through the cycle.
+            cur = x
+            while not found[cur]:
+                found[cur] = True
+                length += 1
+                # Move to the next person
+                cur = choices[cur]
+            lengths.append(length)
+    # Print the lcm of all lengths.
+    cur_lcm = 1
+    for length in lengths:
+        # The lcm of a list is simply the pairwise lcm of each element, combined.
+        cur_lcm = lcm(cur_lcm, length)
+    print(cur_lcm)
+else:
+    # Not a permutation
+    print(-1)
+
+```
+
+</div>
+
+<div id="CHALLENGE-3-CPP" class="code-tabcontent CHALLENGE-3" markdown="1">
+
+```cpp
+#include <vector>
+#include <iostream>
+#include <map>
+
+using namespace std;
+
+typedef long long ll;
+typedef vector<ll> vll;
+
+ll gcd(ll a, ll b) {
+    if (b == 0) return a;
+    return gcd(b, a%b);
+}
+
+ll lcm(ll a, ll b) {
+    return a * b / gcd(a, b);
+}
+
+int main() {
+
+    int n;
+    cin >> n;
+
+    vll nums(n);
+    for (int i=0; i<n; i++) {
+        cin >> nums[i];
+        // Make it 0 -> n-1.
+        nums[i]--;
+    }
+
+    // Check for duplicates
+    bool bad = false;
+    map<int, int> dup_check;
+    for (int i=0; i<n; i++) {
+        dup_check[i] = 0;
+    }
+    for (int i=0; i<n; i++) {
+        dup_check[nums[i]]++;
+        if (dup_check[nums[i]] > 1) {
+            // Someone recieves 2.
+            bad = true;
+        }
+    }
+    if (bad) {
+        cout << -1 << endl;
+    } else {
+        vll lengths;
+        vll found(n, false);
+        for (int i=0; i<n; i++) {
+            if (!found[i]) {
+                int length = 0;
+                int cur = i;
+                while (!found[cur]) {
+                    found[cur] = true;
+                    length++;
+                    cur = nums[cur];
+                }
+                lengths.push_back(length);
+            }
+        }
+        ll cur_lcm = 1;
+        for (ll l: lengths) {
+            cur_lcm = lcm(cur_lcm, l);
+        }
+        cout << cur_lcm << endl;
+    }
+
+    return 0;
+}
+```
+
+</div>
+
+</div>
+
+</div>
