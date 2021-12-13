@@ -17,7 +17,6 @@ window.onload = () => {
           if (lines[k].includes("<span class=\"err\"></span><span class=\"n\">m</span>")) {
               lines[k] = "<span class='highlight_backline_yellow'>" + lines[k].replace("<span class=\"err\"></span><span class=\"n\">m</span>", "") + "</span>"
           }
-          console.log(lines[k]);
       }
       pre.innerHTML = lines.join("\n");
   }
