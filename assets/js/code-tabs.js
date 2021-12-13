@@ -3,9 +3,6 @@ window.onload = () => {
     var all_tablinks = document.getElementsByClassName("code-tablinks");
     for (var j = 0; j < all_tablinks.length; j++) {
         all_tablinks[j].className = all_tablinks[j].className.replace(" active", "");
-        if (all_tablinks[j].innerHTML.toString() === "Python") {
-            all_tablinks[j].className += " active";
-        }
     }
 
     var all_tabcontent = document.getElementsByClassName("code-tabcontent");
@@ -33,6 +30,12 @@ window.onload = () => {
 function openCodeTab(evt, contentClass, tabName) {
     // Declare all variables
     var i, tabcontent, tablinks;
+
+    if (document.getElementById(tabName).style.display == "block") {
+        document.getElementById(tabName).style.display = "none";
+        evt.currentTarget.className = evt.currentTarget.className.replace(" active", "");
+        return;
+    }
 
     tabcontent = document.getElementsByClassName(contentClass);
     for (i = 0; i < tabcontent.length; i++) {
