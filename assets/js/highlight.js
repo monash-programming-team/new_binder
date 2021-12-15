@@ -17,6 +17,12 @@ $(document).ready(() => {
           if (lines[k].includes("<span class=\"err\"></span><span class=\"n\">m</span>")) {
               lines[k] = "<span class='highlight_backline_yellow'>" + lines[k].replace("<span class=\"err\"></span><span class=\"n\">m</span>", "") + "</span>"
           }
+          if (lines[k].includes("b")) {
+            lines[k] = "<span class='highlight_backline_blue'>" + lines[k].replace("b", "") + "</span>"
+          }
+          if (lines[k].includes("<span class=\"err\"></span><span class=\"n\">b</span>")) {
+              lines[k] = "<span class='highlight_backline_blue'>" + lines[k].replace("<span class=\"err\"></span><span class=\"n\">b</span>", "") + "</span>"
+          }
       }
       pre.innerHTML = lines.join("\n");
   }
