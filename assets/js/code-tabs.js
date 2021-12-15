@@ -1,4 +1,4 @@
-window.onload = () => {
+$(document).ready(() => {
     // Open all Python tabs by default.
     var all_tablinks = document.getElementsByClassName("code-tablinks");
     for (var j = 0; j < all_tablinks.length; j++) {
@@ -8,9 +8,6 @@ window.onload = () => {
     var all_tabcontent = document.getElementsByClassName("code-tabcontent");
     for (var j = 0; j < all_tabcontent.length; j++) {
         all_tabcontent[j].style.display = "none";
-        if (all_tabcontent[j].id.indexOf("Python") !== -1) {
-            all_tabcontent[j].style.display = "block";
-        }
     }
     // Generate tooltips
     // https://stackoverflow.com/a/48569235
@@ -25,7 +22,7 @@ window.onload = () => {
     });
 
     $('[data-toggle="tooltip"]').tooltip()
-};
+});
 
 function openCodeTab(evt, contentClass, tabName) {
     // Declare all variables

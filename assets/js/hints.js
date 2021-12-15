@@ -1,4 +1,4 @@
-window.onload = () => {
+$(document).ready(() => {
 
   hints = document.getElementsByClassName("button_unlock");
   for (var i = 0; i < hints.length; i++) {
@@ -11,4 +11,4 @@ window.onload = () => {
     };
   }
 
-};
+});

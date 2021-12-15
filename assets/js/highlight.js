@@ -1,4 +1,4 @@
-window.onload = () => {
+$(document).ready(() => {
 
   var all_code = document.getElementsByClassName("rouge-code");
   for (var j = 0; j < all_code.length; j++) {
@@ -21,4 +21,4 @@ window.onload = () => {
       pre.innerHTML = lines.join("\n");
   }
 
-}
+});
