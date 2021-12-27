@@ -137,3 +137,12 @@ code {
 .highlight_backline_blue {
   background-color: #325ef02c;
 }
+
+td.rouge-gutter {
+  vertical-align: top;
+  padding-top: 1.5rem;
+}
+
+td.rouge-code {
+  vertical-align: top;
+}
